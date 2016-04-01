@@ -1,0 +1,105 @@
+{
+  "fields": [
+    {
+      "mode": "REQUIRED",
+      "name": "install",
+      "type": "STRING"
+    },
+    {
+      "mode": "REQUIRED",
+      "name": "timestamp",
+      "type": "STRING"
+    },
+    {
+      "mode": "REQUIRED",
+      "name": "version",
+      "type": "STRING"
+    },
+    {
+      "mode": "REQUIRED",
+      "name": "stat",
+      "type": "INTEGER"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "servletContainer",
+      "type": "STRING"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "os",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "jvm_name",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "jvm_vendor",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "executors",
+          "type": "INTEGER"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "master",
+          "type": "BOOLEAN"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "nodes",
+      "type": "RECORD"
+    },
+    {
+      "fields": [
+        {
+          "mode": "REQUIRED",
+          "name": "name",
+          "type": "STRING"
+        },
+        {
+          "mode": "REQUIRED",
+          "name": "version",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "plugins",
+      "type": "RECORD"
+    },
+    {
+      "fields": [
+        {
+          "mode": "NULLABLE",
+          "name": "hudson_model_ExternalJob",
+          "type": "INTEGER"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "hudson_model_FreeStyleProject",
+          "type": "INTEGER"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "hudson_maven_MavenModuleSet",
+          "type": "INTEGER"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "hudson_matrix_MatrixProject",
+          "type": "INTEGER"
+        }
+      ],
+      "mode": "REQUIRED",
+      "name": "jobs",
+      "type": "RECORD"
+    }
+  ]
+}

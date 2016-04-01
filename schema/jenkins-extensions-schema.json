@@ -1,0 +1,102 @@
+{
+  "fields" : [ {
+    "mode" : "REQUIRED",
+    "name" : "gav",
+    "type" : "STRING"
+  }, {
+    "mode" : "REQUIRED",
+    "name" : "displayName",
+    "type" : "STRING"
+  }, {
+    "mode" : "REQUIRED",
+    "name" : "url",
+    "type" : "STRING"
+  }, {
+    "fields" : [ {
+      "mode" : "REQUIRED",
+      "name" : "artifact",
+      "type" : "STRING"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "className",
+      "type" : "STRING"
+    }, {
+      "mode" : "NULLABLE",
+      "name" : "extensionPoint",
+      "type" : "STRING"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "lineNumber",
+      "type" : "INTEGER"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "sourceFile",
+      "type" : "STRING"
+    }, {
+      "mode" : "NULLABLE",
+      "name" : "javadoc",
+      "type" : "STRING"
+    } ],
+    "mode" : "REPEATED",
+    "name" : "extensions",
+    "type" : "RECORD"
+  }, {
+    "fields" : [ {
+      "mode" : "REQUIRED",
+      "name" : "artifact",
+      "type" : "STRING"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "className",
+      "type" : "STRING"
+    }, {
+      "mode" : "NULLABLE",
+      "name" : "extensionPoint",
+      "type" : "STRING"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "lineNumber",
+      "type" : "INTEGER"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "sourceFile",
+      "type" : "STRING"
+    }, {
+      "mode" : "NULLABLE",
+      "name" : "javadoc",
+      "type" : "STRING"
+    } ],
+    "mode" : "REPEATED",
+    "name" : "extensionPoints",
+    "type" : "RECORD"
+  }, {
+    "fields" : [ {
+      "mode" : "REQUIRED",
+      "name" : "artifact",
+      "type" : "STRING"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "className",
+      "type" : "STRING"
+    }, {
+      "mode" : "NULLABLE",
+      "name" : "extensionPoint",
+      "type" : "STRING"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "lineNumber",
+      "type" : "INTEGER"
+    }, {
+      "mode" : "REQUIRED",
+      "name" : "sourceFile",
+      "type" : "STRING"
+    }, {
+      "mode" : "NULLABLE",
+      "name" : "javadoc",
+      "type" : "STRING"
+    } ],
+    "mode" : "REPEATED",
+    "name" : "uses",
+    "type" : "RECORD"
+  } ]
+}
