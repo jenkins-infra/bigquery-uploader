@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require 'json'
+require 'time'
 
 #
 # Transforms usage JSON file's jobs element in to big query friendly records
@@ -29,6 +30,11 @@ filter = lambda do |line|
     usage['jobs'].each do |k,v|
       jobs << {'type'=>k.gsub('-','_'), 'count'=>v}
     end
+  end
+
+  # convert to UTC timestamp that bigquery understands
+  if usage['timestamp']
+    usage['timestamp'] = Time.strptime(usage['timestamp'], "%d/%b/%Y:%T %Z").utc
   end
   usage['jobs'] = jobs
   usage.to_json
