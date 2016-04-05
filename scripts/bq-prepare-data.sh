@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-set -x
 
+#
+# Converts extension-points.json in to big query friendly extension records
+#
 function usage(){
     echo "Usage: bq-prepare-data.sh source_path destination_path"
     exit 1

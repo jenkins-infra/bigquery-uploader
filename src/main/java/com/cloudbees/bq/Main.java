@@ -89,24 +89,28 @@ public class Main {
 
     }
     private void run() {
+        BigQueryConfig config = new BigQueryConfig
+                .Builder(projectId, datasetId, tableId, credentialFile)
+                .templateSuffix(templateSuffix)
+                .insertIdField(insertIdField)
+                .schema(schemaFile)
+                .createTable(createTable)
+                .streamingUpload(streamingUpload)
+                .pollingIntervalInSec(pollingInterval)
+                .build();
+        run(config);
+    }
+
+    public void run(BigQueryConfig config){
         long start = System.currentTimeMillis();
         try {
-            BigQueryConfig config = new BigQueryConfig
-                    .Builder(projectId, datasetId, tableId, credentialFile)
-                    .templateSuffix(templateSuffix)
-                    .insertIdField(insertIdField)
-                    .schema(schemaFile)
-                    .createTable(createTable)
-                    .streamingUpload(streamingUpload)
-                    .pollingIntervalInSec(pollingInterval)
-                    .build();
-
             BigQueryApi app = new BigQueryApi(config);
 
             //create new schemaFile
-            if (createTable) {
-                if (schemaFile == null) {
+            if (config.isCreateTable()) {
+                if (config.getSchema() == null) {
                     System.err.println("-schemaFile required with -createTable option");
+                    return;
                 }
                 app.createTable();
             }

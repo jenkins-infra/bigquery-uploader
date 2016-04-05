@@ -77,27 +77,17 @@
     {
       "fields": [
         {
-          "mode": "NULLABLE",
-          "name": "hudson_model_ExternalJob",
-          "type": "INTEGER"
+          "mode": "REQUIRED",
+          "name": "type",
+          "type": "STRING"
         },
         {
-          "mode": "NULLABLE",
-          "name": "hudson_model_FreeStyleProject",
-          "type": "INTEGER"
-        },
-        {
-          "mode": "NULLABLE",
-          "name": "hudson_maven_MavenModuleSet",
-          "type": "INTEGER"
-        },
-        {
-          "mode": "NULLABLE",
-          "name": "hudson_matrix_MatrixProject",
+          "mode": "REQUIRED",
+          "name": "count",
           "type": "INTEGER"
         }
       ],
-      "mode": "REQUIRED",
+      "mode": "REPEATED",
       "name": "jobs",
       "type": "RECORD"
     }

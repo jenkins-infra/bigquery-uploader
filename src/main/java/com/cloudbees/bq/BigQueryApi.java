@@ -49,6 +49,9 @@ public class BigQueryApi {
         }catch (GoogleJsonResponseException e) {
             if(e.getStatusCode() == 409){
                 LOGGER.error("Table: {} already exists. {}",config.getTableId(), e.getMessage());
+            }else{
+                LOGGER.error(e.getMessage());
+                throw new RuntimeException(e);
             }
         }catch (IOException e) {
             throw new RuntimeException("Failed to update schemaFile"+e.getMessage(), e);
