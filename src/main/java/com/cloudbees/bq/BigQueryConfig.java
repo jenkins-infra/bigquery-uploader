@@ -19,6 +19,10 @@ import java.util.Collection;
  * @author Vivek Pandey
  */
 public class BigQueryConfig {
+    public static final String WRITE_APPEND="WRITE_APPEND";
+    public static final String WRITE_EMPTY="WRITE_EMPTY";
+    public static final String WRITE_TRUNCATE="WRITE_TRUNCATE";
+
     private final String projectId;
     private final String datasetId;
     private final String tableId;
@@ -29,6 +33,7 @@ public class BigQueryConfig {
     private TableSchema schema;
     private int pollingIntervalInSec;
     private boolean streamingUpload;
+    private String writeDisposition;
 
     private BigQueryConfig(String projectId, String datasetId, String tableId, File credentialFile) {
         this.projectId = projectId;
@@ -81,6 +86,10 @@ public class BigQueryConfig {
         return createTable;
     }
 
+    public String getWriteDisposition() {
+        return writeDisposition;
+    }
+
     public static final class Builder{
         private final BigQueryConfig config;
 
@@ -124,6 +133,18 @@ public class BigQueryConfig {
 
         public Builder streamingUpload(boolean streamingUpload){
             config.streamingUpload = streamingUpload;
+            return this;
+        }
+
+        public Builder writeDisposition(String writeDisposition){
+            if(writeDisposition == null){
+                writeDisposition = WRITE_APPEND;
+            }else if(!writeDisposition.equals(WRITE_APPEND)
+                    && !writeDisposition.equals(WRITE_EMPTY)
+                    && !writeDisposition.equals(WRITE_TRUNCATE)){
+                throw new IllegalArgumentException(String.format("-writeDisposition must be one of %s (default), %s or %s", WRITE_APPEND, WRITE_EMPTY, WRITE_TRUNCATE));
+            }
+            config.writeDisposition = writeDisposition;
             return this;
         }
 

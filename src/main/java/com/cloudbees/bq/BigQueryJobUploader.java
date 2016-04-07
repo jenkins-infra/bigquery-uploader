@@ -38,6 +38,7 @@ public class BigQueryJobUploader extends Uploader {
 
             configLoad.setEncoding("UTF-8");
             configLoad.setCreateDisposition("CREATE_IF_NEEDED");
+            configLoad.setWriteDisposition(config.getWriteDisposition());//WRITE_APPEND is default
             configLoad.setIgnoreUnknownValues(true);
             jobConfig.setLoad(configLoad);
 
@@ -48,7 +49,7 @@ public class BigQueryJobUploader extends Uploader {
 
             Job j = insert.execute();
             if (!j.getStatus().getState().equals("DONE")) {
-                pollJob(j.getJobReference().getJobId(), 1);
+                pollJob(j.getJobReference().getJobId(), config.getPollingIntervalInSec());
             }
         } catch (IOException | InterruptedException e) {
             LOGGER.error(e.getMessage(),e);

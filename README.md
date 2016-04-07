@@ -13,7 +13,7 @@ Uploads JSON record (each JSON object sperated by new line) content from file to
                                     -schemaFile (default: false)
      -credentialFile FILE         : BigQuery JSON credential file
      -datasetId VAL               : BigQuery datasetId (Required)
-     -h (-help)                   : Print help message (default: true)
+     -h (-help)                   : Print help message (default: false)
      -insertIdField VAL           : Top level JSON field to use for insertId
                                     (streaming upload only)
      -pollingInterval N           : Submitted job polling interval(in seconds)
@@ -25,7 +25,9 @@ Uploads JSON record (each JSON object sperated by new line) content from file to
      -tableId VAL                 : BigQuery tableId (Required)
      -templateSuffix VAL          : Template suffix to be used with this upload
                                     (streaming upload only)
-
+     -writeDisposition VAL        : How the table data should be updated, possible
+                                    values WRITE_TRUNCATE, WRITE_EMPTY and
+                                    WRITE_APPEND(default) (default: WRITE_APPEND)
 ### Authentication
 
 Create credential (JSON private key) using your service account. Refer to: https://console.cloud.google.com/apis/credentials. 

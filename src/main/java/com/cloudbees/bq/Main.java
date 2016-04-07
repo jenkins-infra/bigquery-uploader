@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import static com.cloudbees.bq.BigQueryConfig.WRITE_APPEND;
+
 /**
  * @author Vivek Pandey
  */
@@ -39,6 +41,9 @@ public class Main {
 
     @Option(name="-insertIdField",usage="Top level JSON field to use for insertId (streaming upload only)")
     public String insertIdField;
+
+    @Option(name="-writeDisposition",usage="How the table data should be updated, possible values WRITE_TRUNCATE, WRITE_EMPTY and WRITE_APPEND(default)")
+    public String writeDisposition=WRITE_APPEND;
 
     @Option(name="-createTable",usage="Create new table using the given -tableId and -schemaFile")
     public Boolean createTable=false;
@@ -97,6 +102,7 @@ public class Main {
                 .createTable(createTable)
                 .streamingUpload(streamingUpload)
                 .pollingIntervalInSec(pollingInterval)
+                .writeDisposition(writeDisposition)
                 .build();
         run(config);
     }
