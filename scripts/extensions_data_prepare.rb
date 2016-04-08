@@ -6,7 +6,7 @@ require 'json'
 #
 def transform
   dest = File.open(ARGV[1], 'w')
-  f = File.read(ARGV[0])
+  f = File.read(ARGV[0], :external_encoding=>'utf-8')
   data = JSON.parse(f)
   if data['artifacts']
     data['artifacts'].each do |k,v|

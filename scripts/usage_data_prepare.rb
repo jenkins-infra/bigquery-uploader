@@ -6,7 +6,7 @@ require 'time'
 # Transforms usage JSON file's jobs element in to big query friendly records
 #
 def transform
-  dest = File.open(ARGV[1], 'w')
+  dest = File.open(ARGV[1], 'w', :external_encoding=>'utf-8'))
   File.open(ARGV[0]).each do|line|
     if block_given?
       line = yield line
