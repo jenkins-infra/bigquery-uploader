@@ -1,9 +1,19 @@
 /**
  * Jenkinsfile to automate uploading of census and extension data to BigQuery
  *
+ * Job setup requirement:
+ *  1. install credential-binding plugin
+ *  2. google service account with read/write access to 'jenkins-user-stats' project
+ *  3. Create Google JSON private key with scope: https://www.googleapis.com/auth/bigquery. This scope manages data
+ *    in big query
+ *  4. Create Jenkins credential for 'secret text'
+ *  5. The pipeline job must be configured for required credential parameter with GOOGLE_OAUTH_CREDENTIAL key and value
+ *    of the credential created in step 4.
+ *
+ *
  * @author Vivek Pandey
  */
-def nodeLabel = 'master'
+def nodeLabel = 'docker'
 dockerImage = 'vivekpandey/java8-ruby:v1.1'
 
 /**
