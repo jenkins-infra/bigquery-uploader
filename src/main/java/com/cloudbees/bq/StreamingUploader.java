@@ -1,6 +1,7 @@
 package com.cloudbees.bq;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.services.bigquery.model.TableDataInsertAllRequest;
 import com.google.api.services.bigquery.model.TableDataInsertAllResponse;
 import org.apache.commons.io.FileUtils;
@@ -24,13 +25,13 @@ public class StreamingUploader extends Uploader {
         super(config);
     }
 
-    public void upload(File uploadFile) {
+    public void doUpload(String tableId, File uploadFile) {
         final Iterator<String> rows;
         try {
 
             rows = FileUtils.lineIterator(uploadFile, "UTF-8");
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read BigQuery upload file: "+uploadFile.getAbsolutePath(), e);
+            throw new RuntimeException("Failed to read BigQuery doUpload file: "+uploadFile.getAbsolutePath(), e);
         }
 
         Iterator<TableDataInsertAllResponse> responses = new Iterator<TableDataInsertAllResponse>() {
@@ -63,7 +64,7 @@ public class StreamingUploader extends Uploader {
                         return config.getBigQuery().tabledata().insertAll(
                                 config.getProjectId(),
                                 config.getDatasetId(),
-                                config.getTableId(),
+                                tableId,
                                 new TableDataInsertAllRequest()
                                         .setIgnoreUnknownValues(true)
                                         .setTemplateSuffix(config.getTemplateSuffix())
@@ -93,6 +94,11 @@ public class StreamingUploader extends Uploader {
                 LOGGER.debug(response.toString());
             }
         }
-        LOGGER.info("Streaming upload of table {} completed", config.getTableId());
+        LOGGER.info("Streaming doUpload of table {} completed", config.getTableId());
+    }
+
+    @Override
+    void doUpload(String tableId, AbstractInputStreamContent content) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }

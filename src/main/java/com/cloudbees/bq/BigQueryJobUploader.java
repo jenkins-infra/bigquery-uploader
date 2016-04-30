@@ -1,5 +1,6 @@
 package com.cloudbees.bq;
 
+import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.bigquery.Bigquery;
 import com.google.api.services.bigquery.model.ErrorProto;
@@ -23,10 +24,15 @@ public class BigQueryJobUploader extends Uploader {
         super(config);
     }
 
-    void upload(File uploadFile) {
+    @Override
+    void doUpload(String tableId, File content) {
+        FileContent file = new FileContent("application/octet-stream", content);
+        doUpload(tableId, file);
+    }
+
+    void doUpload(String tableId, AbstractInputStreamContent content) {
         try {
-            Table t = config.getBigQuery().tables().get(config.getProjectId(),config.getDatasetId(),config.getTableId()).execute();
-            FileContent content = new FileContent("application/octet-stream", uploadFile);
+            Table t = config.getBigQuery().tables().get(config.getProjectId(),config.getDatasetId(),tableId).execute();
 
             Job job = new Job();
 

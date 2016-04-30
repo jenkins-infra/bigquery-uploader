@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 /**
@@ -22,6 +23,7 @@ public class BigQueryConfig {
     public static final String WRITE_APPEND="WRITE_APPEND";
     public static final String WRITE_EMPTY="WRITE_EMPTY";
     public static final String WRITE_TRUNCATE="WRITE_TRUNCATE";
+    public static final String UPLOAD_HISTORY_TABLE_ID="upload_history";
 
     private final String projectId;
     private final String datasetId;
@@ -31,9 +33,11 @@ public class BigQueryConfig {
     private String insertIdField;
     private boolean createTable;
     private TableSchema schema;
+    private TableSchema uploadHistorySchema;
     private int pollingIntervalInSec;
     private boolean streamingUpload;
     private String writeDisposition;
+    private UploadHistory.Type uploadType;
 
     private BigQueryConfig(String projectId, String datasetId, String tableId, File credentialFile) {
         this.projectId = projectId;
@@ -41,6 +45,10 @@ public class BigQueryConfig {
         this.tableId = tableId;
         try {
             this.bigQuery = createAuthorizedClient(credentialFile);
+            InputStream is = this.getClass().getResourceAsStream("/upload-history.json");
+            this.uploadHistorySchema = bigQuery
+                    .getJsonFactory()
+                    .fromInputStream(is, TableSchema.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to authenticate with Google BigQuery: "+e.getMessage(), e);
         }
@@ -74,6 +82,10 @@ public class BigQueryConfig {
         return schema;
     }
 
+    public TableSchema getUploadHistorySchema(){
+        return uploadHistorySchema;
+    }
+
     public boolean isStreamingUpload() {
         return streamingUpload;
     }
@@ -88,6 +100,10 @@ public class BigQueryConfig {
 
     public String getWriteDisposition() {
         return writeDisposition;
+    }
+
+    public UploadHistory.Type getUploadType() {
+        return uploadType;
     }
 
     public static final class Builder{
@@ -133,6 +149,11 @@ public class BigQueryConfig {
 
         public Builder streamingUpload(boolean streamingUpload){
             config.streamingUpload = streamingUpload;
+            return this;
+        }
+
+        public Builder uploadType(String type){
+            config.uploadType = UploadHistory.Type.valueOf(type.toUpperCase());
             return this;
         }
 

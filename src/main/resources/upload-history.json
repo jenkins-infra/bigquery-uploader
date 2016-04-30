@@ -1,0 +1,41 @@
+{
+  "fields": [
+    {
+      "mode": "REQUIRED",
+      "name": "timestamp",
+      "type": "TIMESTAMP"
+    },
+    {
+      "mode": "REQUIRED",
+      "name": "status",
+      "type": "STRING"
+    },
+    {
+      "fields": [
+        {
+          "mode": "REQUIRED",
+          "name": "type",
+          "type": "STRING"
+        },
+        {
+          "mode": "REQUIRED",
+          "name": "name",
+          "type": "STRING"
+        },
+        {
+          "mode": "REQUIRED",
+          "name": "sizeInMB",
+          "type": "FLOAT"
+        },
+        {
+          "mode": "REQUIRED",
+          "name": "timestamp",
+          "type": "TIMESTAMP"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "file",
+      "type": "RECORD"
+    }
+  ]
+}

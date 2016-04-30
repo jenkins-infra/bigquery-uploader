@@ -39,6 +39,10 @@ public class Main {
     @Option(name="-templateSuffix",usage="Template suffix to be used with this upload (streaming upload only)")
     public String templateSuffix;
 
+    @Option(name="-uploadType",usage="Upload type, must be census or extension")
+    public String uploadType;
+
+
     @Option(name="-insertIdField",usage="Top level JSON field to use for insertId (streaming upload only)")
     public String insertIdField;
 
@@ -90,6 +94,11 @@ public class Main {
             p.printUsage(System.err);
             return false;
         }
+        if(uploadType == null || !uploadType.equals("census") && !uploadType.equals("extension")){
+            System.err.println("Please provide uploadType, must be one of census or extension");
+            p.printUsage(System.err);
+            return false;
+        }
         return true;
 
     }
@@ -103,6 +112,7 @@ public class Main {
                 .streamingUpload(streamingUpload)
                 .pollingIntervalInSec(pollingInterval)
                 .writeDisposition(writeDisposition)
+                .uploadType(uploadType)
                 .build();
         run(config);
     }
@@ -118,12 +128,15 @@ public class Main {
                     System.err.println("-schemaFile required with -createTable option");
                     return;
                 }
-                app.createTable();
+                app.createTable(tableId, config.getSchema());
             }
+
             if (bqFile != null) {
                 app.upload(bqFile);
             }
-        } finally {
+        }catch (Exception e){
+
+        }finally {
             long timeTaken = (System.currentTimeMillis()-start);
             LOGGER.info(String.format("Total time taken: %02d min, %02d sec",
                     TimeUnit.MILLISECONDS.toMinutes(timeTaken),

@@ -31,7 +31,7 @@ node(nodeLabel) {
 /**
  * Upload extensions index and census data in parallel
  */
-stage 'upload'
+stage 'doUpload'
 parallel(
         'uploadExtension':{
             node(nodeLabel) {
@@ -45,15 +45,15 @@ parallel(
                 }
             }
         }
-//        , 'uploadCensus':{
-//             node(nodeLabel) {
-//                 upload("plugin_extensions",'jenkins-extensions-schema.json', 'census.bq','WRITE_TRUNCATE') {
-//                     recordFile ->
-//                         downloadCensus()
-//                         prepareCensusData('aceess_log', recordFile);
-//                 }
-//             }
-//        }
+        , 'uploadCensus':{
+             node(nodeLabel) {
+                 doUpload("jenkins_usage",'jenkins-extensions-schema.json', 'census.bq') {
+                     recordFile ->
+                         downloadCensus()
+                         prepareCensusData('aceess_log', recordFile);
+                 }
+             }
+        }
 )
 
 // Archive json and bq files
@@ -117,14 +117,14 @@ def downloadExtensionIndex() {
 }
 
 /**
- * Prepare raw extension data for upload to BigQuery
+ * Prepare raw extension data for doUpload to BigQuery
  * @param src source raw data file
  * @param dest destination file where bigquery record is stored
  *
  */
 def prepareExtensionData(String src, String dest) {
     dockerRun {
-        sh "./scripts/extensions_data_prepare.rb $src $dest"
+        sh "./scripts/extensions_data_preparer.rb $src $dest"
     }
 }
 
@@ -133,14 +133,14 @@ def downloadCensus() {
 
 }
 /**
- * Prepare anonymized unencrypted census data for upload to BigQuery
+ * Prepare anonymized unencrypted census data for doUpload to BigQuery
  * @param src source raw data file
  * @param dest destination file where bigquery record is stored
  *
  */
 def prepareCensusData(String src, String dest) {
     dockerRun {
-        sh "./scripts/usage_data_prepare.rb $src $dest"
+        sh "./scripts/census_data_preparer.rb $src $dest"
     }
 }
 
