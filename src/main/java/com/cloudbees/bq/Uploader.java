@@ -58,11 +58,10 @@ public abstract class Uploader {
     }
 
     private Date getFileTimestamp(File uploadFile){
-        if(config.getUploadType().equals("census")){
-            SimpleDateFormat df = new SimpleDateFormat("yyyymmdd");
-            String[] tokens = uploadFile.getName().split(".");
+        if(config.getUploadType() == UploadHistory.Type.CENSUS){
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmss");
             try {
-                return df.parse(tokens[tokens.length - 2]);
+                return df.parse(uploadFile.getName());
             } catch (ParseException e) {
                 LOGGER.error("Failed to parse census timestamp from filename: "+uploadFile.getAbsolutePath(),e);
                 throw new RuntimeException(e);
