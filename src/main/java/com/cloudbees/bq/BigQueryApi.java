@@ -56,7 +56,7 @@ public class BigQueryApi {
             LOGGER.info("Table {} created successfully.", table.getTableReference().getTableId());
         }catch (GoogleJsonResponseException e) {
             if(e.getStatusCode() == 409){
-                LOGGER.error("Table: {} already exists. {}",tableId, e.getMessage());
+                LOGGER.error("Table: {} already exists.",tableId);
             }else{
                 LOGGER.error(e.getMessage());
                 throw new RuntimeException(e);
@@ -71,7 +71,7 @@ public class BigQueryApi {
             return config.getBigQuery().tables().get(config.getProjectId(), config.getDatasetId(), tableId).execute();
         } catch (HttpResponseException e){
           if(e.getStatusCode() == 404){
-              LOGGER.error("Table "+tableId +" not found", e.getContent(), e);
+              LOGGER.error("Table "+tableId +" not found", e.getContent());
               return null;
           }
           throw new RuntimeException("Failed to get table: "+tableId+": "+ e.getMessage(), e);
