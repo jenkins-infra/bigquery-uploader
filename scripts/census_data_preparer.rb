@@ -21,8 +21,9 @@ class CensusFile
   # Transforms usage JSON file's jobs element in to big query friendly records
   #
   def transform
-    dest = File.open(@name, 'w', :external_encoding=>'utf-8')
-    uncompress_name = "#{@name}.raw"
+    return if File.exist?("./census/#{@name}")
+    dest = File.open("./census/#{@name}", 'w', :external_encoding=>'utf-8')
+    uncompress_name = "./uncompressed-data/#{@name}.raw"
     uncompress(uncompress_name)
     File.open(uncompress_name, 'r').each do|line|
       if block_given?
@@ -35,6 +36,7 @@ class CensusFile
 
   private
   def uncompress(n)
+    return if File.exist?(n)
     ufile = File.open(n, 'w', :external_encoding=>'utf-8')
     Zlib::GzipReader.open(@path) do |gz|
       ufile.puts gz.read
@@ -59,11 +61,26 @@ filter = lambda do |line|
     end
   end
 
+  nodes = []
+  if usage['nodes']
+    usage['nodes'].each do |h|
+      h.map{|k,v| [k.gsub('-','_'),] }
+      map = {}
+      h.each do |k,v|
+        k = k.gsub('-','_')
+        map[k]=v
+      end  
+      nodes << map
+    end
+  end
+
+
   # convert to UTC timestamp that bigquery understands
   if usage['timestamp']
     usage['timestamp'] = Time.strptime(usage['timestamp'], "%d/%b/%Y:%T %Z").utc
   end
   usage['jobs'] = jobs
+  usage['nodes'] = nodes
   usage.to_json
 end
 
@@ -97,7 +114,7 @@ def upload f
                         -projectId jenkins-user-stats \
                         -datasetId jenkinsstats \
                         -tableId jenkins_usage \
-                        -bqFile  #{f.name}  \
+                        -bqFile  ./census/#{f.name}  \
                         -schemaFile ./schema/usage-schema.json \
                         -credentialFile ./gapipk.json \
                         -uploadType census \
@@ -115,17 +132,17 @@ else
   order = true
 end
 
-# latest_file=sort(path, order).first
-# latest_file.transform(&filter)
-# upload f
+latest_file=sort(path, order).first
+latest_file.transform(&filter)
+upload latest_file
 
-count = 0
-sort(path, order).each do |f|
-    puts f.inspect
-    f.transform(&filter)
-    upload f
-    count = count.next
-    break if count == 2
-end
+# count = 0
+# sort(path, order).each do |f|    
+#     if (f.timestamp >= Time.strptime("20130107000000", "%Y%m%d")) and (f.timestamp <= Time.strptime("20130107000000", "%Y%m%d"))
+#       puts f.inspect    
+#       f.transform(&filter)
+#       upload f
+#     end
+# end
 
 

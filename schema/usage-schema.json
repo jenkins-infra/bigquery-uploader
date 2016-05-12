@@ -39,6 +39,11 @@
         },
         {
           "mode": "NULLABLE",
+          "name": "jvm_version",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
           "name": "jvm_vendor",
           "type": "STRING"
         },

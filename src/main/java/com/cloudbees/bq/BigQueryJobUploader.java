@@ -56,6 +56,8 @@ public class BigQueryJobUploader extends Uploader {
             Job j = insert.execute();
             if (!j.getStatus().getState().equals("DONE")) {
                 pollJob(j.getJobReference().getJobId(), config.getPollingIntervalInSec());
+            }else{
+                LOGGER.error(j.getStatus().toString());
             }
         } catch (IOException | InterruptedException e) {
             LOGGER.error(e.getMessage(),e);
